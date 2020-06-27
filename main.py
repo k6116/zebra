@@ -157,9 +157,9 @@ def get_expected_moves():
             em_premium = expected_move.get_expected_move_premium(symbol, underlying_price, days_to_expiration)
             
             # Create the object for database insertion
-            expected_move = db_objects.create_em_obj(symbol, underlying_price, expiration_date, days_to_expiration, batch, em_iv, em_premium)
+            em = db_objects.create_em_obj(symbol, underlying_price, expiration_date, days_to_expiration, batch, em_iv, em_premium)
 
-            db.add(expected_move)
+            db.add(em)
             db.commit()
 
             print('expected_move iv: ' + str(em_iv))
@@ -197,6 +197,6 @@ def update_skew_quads():
     # calc_skew_quads(symbol, expiration_date)
 
 # Run the code
-# get_options_chains()
-# get_expected_moves()
+get_options_chains()
+get_expected_moves()
 update_skew_quads()
