@@ -53,7 +53,7 @@ class ExpectedMove(Base):
     calculationDate = Column(String)
 
 class Skew(Base):
-    __tablename__ = "skew"
+    __tablename__ = "skews"
 
     id = Column(Integer, primary_key=True, index=True)
     symbol = Column(String)
@@ -73,3 +73,43 @@ class Skew(Base):
     quad3v4 = Column(Numeric(10, 2))
     calculationDate = Column(String)
     batch = Column(Integer)
+
+class HistOption(Base):
+    __tablename__ = "hist_options"
+
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String)
+    strike = Column(Numeric(10, 2))
+    expirationDate = Column(String)
+    daysToExpiration = Column(String)
+    putCall = Column(String)
+    open = Column(Numeric(10, 2))
+    high = Column(Numeric(10, 2))
+    low = Column(Numeric(10, 2))
+    close = Column(Numeric(10, 2))
+    volume = Column(Integer)
+    date = Column(String)
+
+class HistStock(Base):
+    __tablename__ = "hist_stocks"
+
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String)
+    date = Column(String)
+    open = Column(Numeric(10, 2))
+    high = Column(Numeric(10, 2))
+    low = Column(Numeric(10, 2))
+    close = Column(Numeric(10, 2))
+    volume = Column(Integer)
+
+class HistExpectedMove(Base):
+    __tablename__ = "hist_expected_moves"
+
+    id = Column(Integer, primary_key=True, index=True)
+    symbol = Column(String)
+    start_date = Column(String)
+    end_date = Column(String)
+    expected_move = Column(Numeric(10, 2))
+    actual_move = Column(Numeric(10, 2))
+    delta = Column(Numeric(10, 2))
+    expected_move_touches = Column(Numeric(10, 2))

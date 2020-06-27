@@ -2,6 +2,15 @@ from models import Stock, Option, ExpectedMove, Skew
 import datetime
 
 def create_option_obj(symbol, option_data, underlying_price, batch, strike, expiration_date, days_to_expiration):
+
+    # format the quote time and today
+    if option_data['quoteTimeInLong'] > 0:
+        quoteDateTime = datetime.datetime.fromtimestamp(option_data['quoteTimeInLong'] / 1e3)
+    else:
+        quoteDateTime = 0
+
+    today = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     option = Option()
     option.symbol = symbol
     option.underlyingPrice = underlying_price
@@ -18,12 +27,15 @@ def create_option_obj(symbol, option_data, underlying_price, batch, strike, expi
     option.vega = option_data['vega']
     option.theta = option_data['theta']
     option.impliedVolatility = option_data['volatility']
-    option.quoteDateTime = datetime.datetime.fromtimestamp(option_data['quoteTimeInLong'] / 1e3)
-    option.creationDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    option.quoteDateTime = quoteDateTime
+    option.creationDate = today
     option.batch = batch
     return option
 
 def create_em_obj(symbol, underlying_price, expiration_date, days_to_expiration, batch, em_iv, em_premium):
+
+    today = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+
     expected_move = ExpectedMove()
     expected_move.symbol = symbol
     expected_move.underlyingPrice = underlying_price
@@ -32,5 +44,5 @@ def create_em_obj(symbol, underlying_price, expiration_date, days_to_expiration,
     expected_move.expectedMoveIV = em_iv
     expected_move.expectedMovePremium = em_premium
     expected_move.batch = batch
-    expected_move.calculationDate = datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    expected_move.calculationDate = today
     return expected_move

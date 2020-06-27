@@ -106,17 +106,19 @@ def insert_data(symbol, optionsChain, underlying_price, batch):
 
         for strike in optionsChain['callExpDateMap'][exp]:
 
-            if len(optionsChain['callExpDateMap'][exp]) > 4 and strike in optionsChain['putExpDateMap'][exp]:
+            if len(optionsChain['callExpDateMap'][exp]) > 4 and strike in optionsChain['putExpDateMap'][exp] and strike in optionsChain['putExpDateMap'][exp]:
 
                 # Insert the put/call option into the database
                 for option_data in optionsChain['callExpDateMap'][exp][strike]:
-                    option = db_objects.create_option_obj(symbol, option_data, underlying_price, batch, strike, expiration_date, days_to_expiration)
-                    db.add(option)
-                    db.commit()
+                    if not option_data['nonStandard']: # we don't want to track non-standard options
+                        option = db_objects.create_option_obj(symbol, option_data, underlying_price, batch, strike, expiration_date, days_to_expiration)
+                        db.add(option)
+                        db.commit()
                 for option_data in optionsChain['putExpDateMap'][exp][strike]:
-                    option = db_objects.create_option_obj(symbol, option_data, underlying_price, batch, strike, expiration_date, days_to_expiration)
-                    db.add(option)
-                    db.commit()
+                    if not option_data['nonStandard']:
+                        option = db_objects.create_option_obj(symbol, option_data, underlying_price, batch, strike, expiration_date, days_to_expiration)
+                        db.add(option)
+                        db.commit()
     print('Finished inserting data')
         
 def get_expected_moves():
@@ -198,5 +200,5 @@ def update_skew_quads():
 
 # Run the code
 get_options_chains()
-get_expected_moves()
-update_skew_quads()
+# get_expected_moves()
+# update_skew_quads()
